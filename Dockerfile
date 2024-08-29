@@ -8,10 +8,8 @@ RUN npm install
 
 COPY . .
 
-RUN npx prisma generate
-
-RUN npx prisma migrate dev --name init
+RUN chmod +x /app/wait-for-it.sh
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+CMD ["./wait-for-it.sh", "db:5432", "--", "sh", "-c", "npx prisma generate && npx prisma migrate dev --name init && npm run dev"
